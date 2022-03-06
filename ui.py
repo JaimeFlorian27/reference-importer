@@ -13,8 +13,8 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
-class Ui_Test(object):
-    def setupUi(self, Dialog):
+class Ui(object):
+    def __init__(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(317, 355)
@@ -96,6 +96,7 @@ class Ui_Test(object):
 
         self.spinBox_frameRate = QSpinBox(self.groupBox_output)
         self.spinBox_frameRate.setObjectName(u"spinBox_frameRate")
+        self.spinBox_frameRate.setValue(24)
 
         self.gridLayout_output.addWidget(self.spinBox_frameRate, 2, 1, 1, 1)
 
@@ -134,3 +135,5 @@ class Ui_Test(object):
         self.pushButton_create_image_sequence.setText(QCoreApplication.translate("Dialog", u"Create Image Sequence", None))
     # retranslateUi
 
+if __name__ == "__main__":
+    pass
