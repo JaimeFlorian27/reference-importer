@@ -1,16 +1,17 @@
 import sys
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence')
-sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\thirdparty')
-sys.path.append('C:\\Python27\\lib\\site-packages')
+sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib')
 
-import ffmpeg
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-from ui import Ui
-from thirdparty.imageSequence import ImageSequencer
-
+import ReferenceImporter.ui.main_dialog_ui 
+reload(ReferenceImporter.ui.main_dialog_ui)
+from ReferenceImporter.ui.main_dialog_ui import Ui
+import ReferenceImporter.imageSequence 
+reload(ReferenceImporter.imageSequence)
+from ReferenceImporter.imageSequence import ImageSequencer
 def maya_main_window():
     """
     Return the Maya main window widget as a Python object
