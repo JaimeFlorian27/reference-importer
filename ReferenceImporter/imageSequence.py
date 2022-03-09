@@ -7,23 +7,18 @@ import subprocess
 
 class ImageSequencer():
 
-    def __init__(self, video_file="",output_dir="",output_name="test%03d.jpg", padding = "%03d" ,output_frameRate= 24):
+    def __init__(self, video_file="",output_name="", padding = "%03d" ,output_frameRate= 24):
         self.output_frameRate = output_frameRate
         self.video_file = video_file
-        self.output_dir = output_dir
         self.output_name= output_name
         self.padding = padding
         self.trim_start = 0
         self.trim_end = 0
-        self.ffmpeg_path = 'C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib\\ffmpeg\\ffmpeg.exe'
+        self.ffmpeg_path = ('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib\\ffmpeg\\ffmpeg.exe')
         print(self.ffmpeg_path)
     
-    def createSequence(self):
-        self.output_name = "test%03d.jpg"
-        self.output_name = self.output_dir + "\\" + self.output_name
-
-        command = ['ffmpeg', '-i', self.video_file, '-r', '24', self.output_name]
-        command = ('ffmpeg -i '+ self.video_file + ' -r ' + str(self.output_frameRate) + " " + self.output_name).encode('Cp1252')
+    def createSequence(self,input_file, frameRate, output_file):
+        command = ('ffmpeg -i %s -r %s %s' % (input_file,frameRate,output_file)).encode('Cp1252')
         print(command)
         try:
             subprocess.call(command)

@@ -1,11 +1,11 @@
 import os
+from sndhdr import what
 import sys
-reload(sys)  
-sys.setdefaultencoding('Cp1252')
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence')
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib')
 sys.path.append('C:\\Python27\\Lib\\site-packages')
 from PySide2 import QtCore,QtGui,QtWidgets
+import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
@@ -15,6 +15,8 @@ from ReferenceImporter.ui.main_dialog_ui import Ui
 import ReferenceImporter.imageSequence 
 reload(ReferenceImporter.imageSequence)
 from ReferenceImporter.imageSequence import ImageSequencer
+
+
 def maya_main_window():
     """
     Return the Maya main window widget as a Python object
@@ -57,22 +59,28 @@ class Dialog(QtWidgets.QDialog):
         filename = output_dialog.getExistingDirectory()
         self.ui.lineEdit_output_directory.setText(filename)
     def CreateImageSequence(self):
-        self.imageSequencer.video_file = os.path.normpath(self.ui.lineEdit.text())
-        print(whatisthis(self.imageSequencer.video_file))
-        self.imageSequencer.output_dir =  os.path.normpath(self.ui.lineEdit_output_directory.text())
-        print(whatisthis(self.imageSequencer.output_dir))
-        self.imageSequencer.createSequence()
+        frameRate = str(self.ui.spinBox_frameRate.value())
+        print(frameRate)
+
+        input_file = os.path.normpath(self.ui.lineEdit.text())
+        print( os.path.normpath(self.ui.lineEdit.text()))
+
+        output_dir = os.path.normpath(self.ui.lineEdit_output_directory.text())
+        output_ext = self.ui.comboBox.currentText()
         
+        output_name = self.ui.lineEdit_2.text()+"%03d"+output_ext
+        output_file = os.path.join(output_dir, output_name)
 
-def whatisthis(s):
-    if isinstance(s, str):
-        print ("ordinary string")
-    elif isinstance(s, unicode):
-        print ("unicode string")
-    else:
-        print ("not a string")
+        print(os.path.join(output_file))
 
+        self.imageSequencer.createSequence(input_file,frameRate, output_file)
+        
+        if self.ui.checkBox_imagePlane.isChecked():
+            output_file = output_file.replace('%03d', '001')
+            image_plane = cmds.imagePlane(fn = output_file)
+            cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
 
+        
 if __name__ == "__main__":
     global dialog
     try:
