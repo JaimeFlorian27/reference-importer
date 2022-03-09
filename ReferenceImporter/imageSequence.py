@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: Cp1252 -*-
 
 import os
 import subprocess
@@ -16,16 +16,20 @@ class ImageSequencer():
         self.trim_start = 0
         self.trim_end = 0
         self.ffmpeg_path = 'C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib\\ffmpeg\\ffmpeg.exe'
+        print(self.ffmpeg_path)
     
     def createSequence(self):
         self.output_name = "test%03d.jpg"
         self.output_name = self.output_dir + "\\" + self.output_name
 
-        command = ([self.ffmpeg_path, '-i', self.video_file, '-r', '24', '-o', self.output_name])
+        command = ['ffmpeg', '-i', self.video_file, '-r', '24', self.output_name]
+        command = ('ffmpeg -i '+ self.video_file + ' -r ' + str(self.output_frameRate) + " " + self.output_name).encode('Cp1252')
+        print(command)
         try:
-            subprocess.call(command, shell=True)
-        except:
-            print("Failed to playblast during command call.")
+            subprocess.call(command)
+        except Exception as e: 
+            print(e)
+            raise e
         #Create Image Plane       
         #image_plane = cmds.imagePlane(fn = self.video_file)
         #cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
