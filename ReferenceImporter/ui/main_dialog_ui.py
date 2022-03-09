@@ -147,7 +147,7 @@ class Ui(object):
         self.groupBox_input.setTitle(QCoreApplication.translate("Dialog", u"Input", None))
         self.label_video_file.setText(QCoreApplication.translate("Dialog", u"Video File", None))
         self.pushButton_fileExplorer_input.setText(QCoreApplication.translate("Dialog", u"Open...", None))
-        self.groupBox_trim.setTitle(QCoreApplication.translate("Dialog", u"Trimmiiiiiiiiiiiing", None))
+        self.groupBox_trim.setTitle(QCoreApplication.translate("Dialog", u"Trimming", None))
         self.label_start_trim.setText(QCoreApplication.translate("Dialog", u"Start", None))
         self.label_end_trim.setText(QCoreApplication.translate("Dialog", u"End", None))
         self.groupBox_output.setTitle(QCoreApplication.translate("Dialog", u"Output", None))

@@ -1,7 +1,10 @@
+import os
 import sys
+reload(sys)  
+sys.setdefaultencoding('Cp1252')
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence')
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib')
-
+sys.path.append('C:\\Python27\\Lib\\site-packages')
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
@@ -18,7 +21,6 @@ def maya_main_window():
     """
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(long(main_window_ptr), QtWidgets.QWidget)
-
 class Dialog(QtWidgets.QDialog):
     def __init__(self,parent=maya_main_window()):
         super(Dialog,self).__init__(parent)
@@ -30,7 +32,6 @@ class Dialog(QtWidgets.QDialog):
         self.ui.pushButton_fileExplorer_input.clicked.connect(self.SetInput)
         self.ui.pushButton_fileExplorer_output.clicked.connect(self.SetOutput)
         self.ui.pushButton_create_image_sequence.clicked.connect(self.CreateImageSequence)
-
     def SetInput(self):
         try:
             input_dialog.close()
@@ -54,14 +55,22 @@ class Dialog(QtWidgets.QDialog):
         #output_dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         output_dialog.setNameFilter('Videos (*.mp4 *.mov *.1)')
         filename = output_dialog.getExistingDirectory()
-        self.ui.lineEdit_output_directory.setText(str(filename))
-
+        self.ui.lineEdit_output_directory.setText(filename)
     def CreateImageSequence(self):
-        self.imageSequencer.video_file = str(self.ui.lineEdit.text())
-        print(self.imageSequencer.video_file)
-        self.imageSequencer.output_dir = str(self.ui.lineEdit_output_directory.text())
-        print(self.imageSequencer.output_dir)
+        self.imageSequencer.video_file = os.path.normpath(self.ui.lineEdit.text())
+        print(whatisthis(self.imageSequencer.video_file))
+        self.imageSequencer.output_dir =  os.path.normpath(self.ui.lineEdit_output_directory.text())
+        print(whatisthis(self.imageSequencer.output_dir))
         self.imageSequencer.createSequence()
+        
+
+def whatisthis(s):
+    if isinstance(s, str):
+        print ("ordinary string")
+    elif isinstance(s, unicode):
+        print ("unicode string")
+    else:
+        print ("not a string")
 
 
 if __name__ == "__main__":
@@ -69,7 +78,6 @@ if __name__ == "__main__":
     try:
         dialog.close()
     except:pass
-
     dialog = Dialog()
     dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
     dialog.show()
