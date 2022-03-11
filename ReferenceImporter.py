@@ -1,4 +1,5 @@
 import os
+from pickle import TRUE
 import sys
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence')
 sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib')
@@ -28,7 +29,7 @@ class Dialog(QtWidgets.QDialog):
         self.ui = Ui(self)
         self.CreateConnections()
         self.ui.pushButton_create_image_sequence.setDisabled(True)
-    
+
     def CreateConnections(self):
         self.ui.pushButton_fileExplorer_input.clicked.connect(self.SetInput)
         self.ui.pushButton_fileExplorer_output.clicked.connect(self.SetOutput)
@@ -68,13 +69,29 @@ class Dialog(QtWidgets.QDialog):
             self.ui.lineEdit_output_directory.setText(filename)
     
     def CheckText(self):
-        valid = True
-        if not self.ui.lineEdit.text(): valid = False 
-        if not self.ui.lineEdit_2.text(): valid = False
-        if not self.ui.lineEdit_start_trim.text(): valid = False
-        if not self.ui.lineEdit_end_trim.text(): valid = False
-        if not self.ui.lineEdit_output_directory.text(): valid = False
-        self.ui.pushButton_create_image_sequence.setEnabled(valid)
+        valid_fields = []
+        valid_fields.append(bool(self.ui.lineEdit.text()))
+        valid_fields.append(bool(self.ui.lineEdit_2.text()))
+        valid_fields.append(bool(self.ui.lineEdit_start_trim.text()))
+        valid_fields.append(bool(self.ui.lineEdit_end_trim.text()))
+        valid_fields.append(bool(self.ui.lineEdit_output_directory.text()))
+
+        valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_start_trim.text()))
+        valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_end_trim.text()))
+
+        if all(valid_fields):
+            self.ui.pushButton_create_image_sequence.setEnabled(True)
+        else : self.ui.pushButton_create_image_sequence.setEnabled(False)
+
+    def ValidateTimecode(self, text, ):
+        timecode_rx = QtCore.QRegExp('([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]{0,2}')
+        timecode_validator = QtGui.QRegExpValidator(timecode_rx, self)
+        state = timecode_validator.validate(text,0)
+        if state[0] == QtGui.QRegExpValidator.Acceptable :
+            return True
+
+        else : 
+            return False
 
     def CreateImageSequence(self):
         frameRate = str(self.ui.spinBox_frameRate.value())
