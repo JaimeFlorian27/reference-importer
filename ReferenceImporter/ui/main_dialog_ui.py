@@ -54,11 +54,13 @@ class Ui(object):
 
         self.lineEdit_start_trim = QLineEdit(self.groupBox_trim)
         self.lineEdit_start_trim.setObjectName(u"lineEdit_start_trim")
+        self.lineEdit_start_trim.setText('00:00:00')
 
         self.gridLayout_trim.addWidget(self.lineEdit_start_trim, 1, 1, 1, 1)
 
         self.lineEdit_end_trim = QLineEdit(self.groupBox_trim)
         self.lineEdit_end_trim.setObjectName(u"lineEdit_end_trim")
+        self.lineEdit_end_trim.setText('00:00:00')
 
         self.gridLayout_trim.addWidget(self.lineEdit_end_trim, 1, 3, 1, 1)
 
