@@ -1,8 +1,8 @@
 import os
-from pickle import TRUE
 import sys
-sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence')
-sys.path.append('C:\\Users\\Usuario\\OneDrive\\Escritorio\\Arte\\Programación\\Maya\\scripts\\imageSequence\\ReferenceImporter\\lib')
+libs =  os.path.abspath(os.path.dirname(__file__)).decode('Cp1252')
+libs = os.path.join(libs,'ReferenceImporter\\lib')
+sys.path.append(libs)
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
 import maya.OpenMaya as om
@@ -23,6 +23,20 @@ def maya_main_window():
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(long(main_window_ptr), QtWidgets.QWidget)
 class Dialog(QtWidgets.QDialog):
+
+    dlg_instance = None
+
+    @classmethod
+    def show_dialog(cls):
+        if not cls.dlg_instance:
+            cls.dlg_instance = Dialog()
+
+        if cls.dlg_instance.isHidden():
+            cls.dlg_instance.show()
+        else:
+            cls.dlg_instance.raise_()
+            cls.dlg_instance.activateWindow()
+
     def __init__(self,parent=maya_main_window()):
         super(Dialog,self).__init__(parent)
         self.imageSequencer = ImageSequencer()
@@ -119,12 +133,3 @@ class Dialog(QtWidgets.QDialog):
             output_file = output_file.replace('%03d', '001')
             image_plane = cmds.imagePlane(fn = output_file)
             cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
-
-        
-if __name__ == "__main__":
-    try:
-        dialog.close()
-    except:pass
-    dialog = Dialog()
-    dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-    dialog.show()
