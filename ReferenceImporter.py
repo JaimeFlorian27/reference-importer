@@ -105,7 +105,6 @@ class Dialog(QtWidgets.QDialog):
 
         
 if __name__ == "__main__":
-    global dialog
     try:
         dialog.close()
     except:pass
