@@ -1,4 +1,4 @@
-# -*- coding: mbcs -*-
+# -*- coding: utf-8 -*-
 import os
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
