@@ -67,36 +67,41 @@ class ReferenceImportDialog(QtWidgets.QDialog):
         if filename != "":
             self.ui.lineEdit_end_trim.setText(duration)
             self.ui.lineEdit.setText(filename)
-            print(filename)
-            print(type(filename))
             duration = self.imageSequencer.getDuration(filename)
-            print(duration)
     def SetOutput(self):
         try:
             output_dialog.close()
             output_dialog.deleteLater()
         except:pass
-        filename = self.ui.lineEdit_output_directory.text()
-        output_dialog = QtWidgets.QFileDialog(self)
-        output_dialog.setNameFilter('Videos (*.mp4 *.mov *.1)')
-        filename = output_dialog.getExistingDirectory(self,"Select Output Pants", filename)
-        if filename[0] != "":
-            self.ui.lineEdit_output_directory.setText(filename)
+        try:
+            filename = self.ui.lineEdit_output_directory.text()
+            output_dialog = QtWidgets.QFileDialog(self)
+            output_dialog.setNameFilter('Videos (*.mp4 *.mov *.1)')
+            filename = output_dialog.getExistingDirectory(self,"Select Output Pants", filename)
+            if filename[0] != "":
+                self.ui.lineEdit_output_directory.setText(filename)
+        except Exception as e: 
+            cmds.warning(e)
+            raise e
     
     def CheckText(self):
-        valid_fields = []
-        valid_fields.append(bool(self.ui.lineEdit.text()))
-        valid_fields.append(bool(self.ui.lineEdit_2.text()))
-        valid_fields.append(bool(self.ui.lineEdit_start_trim.text()))
-        valid_fields.append(bool(self.ui.lineEdit_end_trim.text()))
-        valid_fields.append(bool(self.ui.lineEdit_output_directory.text()))
+        try:
+            valid_fields = []
+            valid_fields.append(bool(self.ui.lineEdit.text()))
+            valid_fields.append(bool(self.ui.lineEdit_2.text()))
+            valid_fields.append(bool(self.ui.lineEdit_start_trim.text()))
+            valid_fields.append(bool(self.ui.lineEdit_end_trim.text()))
+            valid_fields.append(bool(self.ui.lineEdit_output_directory.text()))
 
-        valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_start_trim.text()))
-        valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_end_trim.text()))
+            valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_start_trim.text()))
+            valid_fields.append(self.ValidateTimecode(self.ui.lineEdit_end_trim.text()))
 
-        if all(valid_fields):
-            self.ui.pushButton_create_image_sequence.setEnabled(True)
-        else : self.ui.pushButton_create_image_sequence.setEnabled(False)
+            if all(valid_fields):
+                self.ui.pushButton_create_image_sequence.setEnabled(True)
+            else : self.ui.pushButton_create_image_sequence.setEnabled(False)
+        except Exception as e: 
+            cmds.warning(e)
+            raise e
 
     def ValidateTimecode(self, text, ):
         timecode_rx = QtCore.QRegExp('([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]{0,2}')
@@ -109,31 +114,29 @@ class ReferenceImportDialog(QtWidgets.QDialog):
             return False
 
     def CreateImageSequence(self):
-        frameRate = str(self.ui.spinBox_frameRate.value())
-        print(frameRate)
+        try:
+            frameRate = str(self.ui.spinBox_frameRate.value())
 
-        input_file = os.path.normpath(self.ui.lineEdit.text())
-        print( os.path.normpath(self.ui.lineEdit.text()))
+            input_file = os.path.normpath(self.ui.lineEdit.text())
 
-        trim_start = str(self.ui.lineEdit_start_trim.text())
-        print(trim_start)
-        trim_end = str(self.ui.lineEdit_end_trim.text())
-        print(trim_end)
+            trim_start = str(self.ui.lineEdit_start_trim.text())
+            trim_end = str(self.ui.lineEdit_end_trim.text())
 
-        output_dir = os.path.normpath(self.ui.lineEdit_output_directory.text())
-        output_ext = self.ui.comboBox.currentText()
-        
-        output_name = self.ui.lineEdit_2.text()+"%03d"+output_ext
-        output_file = os.path.join(output_dir, output_name)
+            output_dir = os.path.normpath(self.ui.lineEdit_output_directory.text())
+            output_ext = self.ui.comboBox.currentText()
 
-        print(os.path.join(output_file))
+            output_name = self.ui.lineEdit_2.text()+"%03d"+output_ext
+            output_file = os.path.join(output_dir, output_name)
 
-        self.imageSequencer.createSequence(input_file,frameRate,trim_start,trim_end, output_file)
-        
-        if self.ui.checkBox_imagePlane.isChecked():
-            output_file = output_file.replace('%03d', '001')
-            image_plane = cmds.imagePlane(fn = output_file)
-            cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
+            self.imageSequencer.createSequence(input_file,frameRate,trim_start,trim_end, output_file)
+
+            if self.ui.checkBox_imagePlane.isChecked():
+                output_file = output_file.replace('%03d', '001')
+                image_plane = cmds.imagePlane(fn = output_file)
+                cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
+        except Exception as e: 
+            cmds.warning(e)
+            raise e
 
 if 'name' == "__main__":
     ReferenceImportDialog.show_dialog()
