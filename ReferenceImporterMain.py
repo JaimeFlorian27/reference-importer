@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+
+libs =  os.path.abspath(os.path.dirname(__file__))
+sys.path.append(libs)
+libs = os.path.join(libs,'ReferenceImporter\\lib')
+sys.path.append(libs)
+
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-import ReferenceImporter.ui.main_dialog_ui
-reload(ReferenceImporter.ui.main_dialog_ui)
+
 from ReferenceImporter.ui.main_dialog_ui import Ui
-import ReferenceImporter.imageSequence
-reload(ReferenceImporter.imageSequence)
 from ReferenceImporter.imageSequence import ImageSequencer
-
-
 
 def maya_main_window():
     """
