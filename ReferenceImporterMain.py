@@ -1,19 +1,17 @@
+# -*- coding: mbcs -*-
 import os
-import sys
-libs =  os.path.abspath(os.path.dirname(__file__)).decode('Cp1252')
-libs = os.path.join(libs,'ReferenceImporter\\lib')
-sys.path.append(libs)
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-import ReferenceImporter.ui.main_dialog_ui 
+import ReferenceImporter.ui.main_dialog_ui
 reload(ReferenceImporter.ui.main_dialog_ui)
 from ReferenceImporter.ui.main_dialog_ui import Ui
-import ReferenceImporter.imageSequence 
+import ReferenceImporter.imageSequence
 reload(ReferenceImporter.imageSequence)
 from ReferenceImporter.imageSequence import ImageSequencer
+
 
 
 def maya_main_window():
@@ -21,15 +19,15 @@ def maya_main_window():
     Return the Maya main window widget as a Python object
     """
     main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtWidgets.QWidget)
-class Dialog(QtWidgets.QDialog):
+    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
+class ReferenceImportDialog(QtWidgets.QDialog):
 
     dlg_instance = None
 
     @classmethod
     def show_dialog(cls):
         if not cls.dlg_instance:
-            cls.dlg_instance = Dialog()
+            cls.dlg_instance = ReferenceImportDialog()
 
         if cls.dlg_instance.isHidden():
             cls.dlg_instance.show()
@@ -38,7 +36,7 @@ class Dialog(QtWidgets.QDialog):
             cls.dlg_instance.activateWindow()
 
     def __init__(self,parent=maya_main_window()):
-        super(Dialog,self).__init__(parent)
+        super(ReferenceImportDialog,self).__init__(parent)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()
@@ -64,12 +62,15 @@ class Dialog(QtWidgets.QDialog):
         selected_filter = "Video File (*.mp4 *.mov *.avi *mkv);;All Files (*.*)"
         input_dialog = QtWidgets.QFileDialog(self)
         filename = input_dialog.getOpenFileName(self,"Select Video File", filename,selected_filter)
+        filename = filename[0]
 
-        if filename[0] != "":
-            self.ui.lineEdit.setText(filename[0])
-            duration = self.imageSequencer.getDuration(filename[0]).encode('Cp1252')
-            print(duration)
+        if filename != "":
             self.ui.lineEdit_end_trim.setText(duration)
+            self.ui.lineEdit.setText(filename)
+            print(filename)
+            print(type(filename))
+            duration = self.imageSequencer.getDuration(filename)
+            print(duration)
     def SetOutput(self):
         try:
             output_dialog.close()
@@ -133,3 +134,6 @@ class Dialog(QtWidgets.QDialog):
             output_file = output_file.replace('%03d', '001')
             image_plane = cmds.imagePlane(fn = output_file)
             cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
+
+if 'name' == "__main__":
+    ReferenceImportDialog.show_dialog()
