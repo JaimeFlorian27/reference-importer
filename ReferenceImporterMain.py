@@ -81,7 +81,6 @@ class ReferenceImportDialog(QtWidgets.QDialog):
             if filename[0] != "":
                 self.ui.lineEdit_output_directory.setText(filename)
         except Exception as e: 
-            cmds.warning(e)
             raise e
     
     def CheckText(self):
@@ -100,7 +99,6 @@ class ReferenceImportDialog(QtWidgets.QDialog):
                 self.ui.pushButton_create_image_sequence.setEnabled(True)
             else : self.ui.pushButton_create_image_sequence.setEnabled(False)
         except Exception as e: 
-            cmds.warning(e)
             raise e
 
     def ValidateTimecode(self, text, ):
@@ -135,7 +133,6 @@ class ReferenceImportDialog(QtWidgets.QDialog):
                 image_plane = cmds.imagePlane(fn = output_file)
                 cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
         except Exception as e: 
-            cmds.warning(e)
             raise e
 
 if 'name' == "__main__":

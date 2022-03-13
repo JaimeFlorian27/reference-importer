@@ -15,14 +15,13 @@ class ImageSequencer():
         self.padding = padding
         self.trim_start = 0
         self.trim_end = 0
-        self.encoding = 'cp1252'
-        self.ffmpeg_path = os.path.abspath(os.path.dirname(__file__)).decode(self.encoding)
+        self.ffmpeg_path = os.path.abspath(os.path.dirname(__file__))
         self.ffmpeg_path = os.path.join(self.ffmpeg_path,'lib\\ffmpeg\\', 'ffmpeg').replace("\\","/")
         
     def getDuration(self, video_file):
-        command = (u'"%s" -i "%s" 2>&1 | findstr "Duration"' %(self.ffmpeg_path,video_file)).encode(self.encoding)
+        command = (u'"%s" -i "%s" 2>&1 | findstr "Duration"' %(self.ffmpeg_path,video_file))
         try:
-           process = subprocess.check_output(command, shell=True).encode(self.encoding)
+           process = subprocess.check_output(command, shell=True)
            process = str(process).strip()
            process = process.split(" ")
            process = process[1][0:11]
@@ -30,7 +29,7 @@ class ImageSequencer():
             raise e
         return process
     def createSequence(self,input_file, frameRate,start_trim,end_trim, output_file):
-        command = ('"%s" -i "%s" -r %s -vf scale=1280:-1 -ss %s -to %s "%s"' % (self.ffmpeg_path,input_file,frameRate,start_trim,end_trim,output_file)).encode(self.encoding)
+        command = ('"%s" -i "%s" -r %s -vf scale=1280:-1 -ss %s -to %s "%s"' % (self.ffmpeg_path,input_file,frameRate,start_trim,end_trim,output_file))
         try:
             subprocess.call(command)
         except Exception as e: 
