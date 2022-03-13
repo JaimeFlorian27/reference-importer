@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-
 libs =  os.path.abspath(os.path.dirname(__file__))
-sys.path.append(libs)
 libs = os.path.join(libs,'ReferenceImporter\\lib')
 sys.path.append(libs)
-
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-
 from ReferenceImporter.ui.main_dialog_ui import Ui
 from ReferenceImporter.imageSequence import ImageSequencer
+
 
 def maya_main_window():
     """
@@ -27,7 +24,7 @@ class ReferenceImportDialog(QtWidgets.QDialog):
     dlg_instance = None
 
     @classmethod
-    def show_dialog(cls):
+    def run(cls):
         if not cls.dlg_instance:
             cls.dlg_instance = ReferenceImportDialog()
 
@@ -39,6 +36,8 @@ class ReferenceImportDialog(QtWidgets.QDialog):
 
     def __init__(self,parent=maya_main_window()):
         super(ReferenceImportDialog,self).__init__(parent)
+
+        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()
@@ -67,9 +66,9 @@ class ReferenceImportDialog(QtWidgets.QDialog):
         filename = filename[0]
 
         if filename != "":
+            duration = self.imageSequencer.getDuration(filename)
             self.ui.lineEdit_end_trim.setText(duration)
             self.ui.lineEdit.setText(filename)
-            duration = self.imageSequencer.getDuration(filename)
     def SetOutput(self):
         try:
             output_dialog.close()
@@ -78,8 +77,7 @@ class ReferenceImportDialog(QtWidgets.QDialog):
         try:
             filename = self.ui.lineEdit_output_directory.text()
             output_dialog = QtWidgets.QFileDialog(self)
-            output_dialog.setNameFilter('Videos (*.mp4 *.mov *.1)')
-            filename = output_dialog.getExistingDirectory(self,"Select Output Pants", filename)
+            filename = output_dialog.getExistingDirectory(self,"Select Output Path", filename)
             if filename[0] != "":
                 self.ui.lineEdit_output_directory.setText(filename)
         except Exception as e: 
@@ -127,7 +125,7 @@ class ReferenceImportDialog(QtWidgets.QDialog):
             output_dir = os.path.normpath(self.ui.lineEdit_output_directory.text())
             output_ext = self.ui.comboBox.currentText()
 
-            output_name = self.ui.lineEdit_2.text()+"%03d"+output_ext
+            output_name = self.ui.lineEdit_2.text()+"_%03d"+output_ext
             output_file = os.path.join(output_dir, output_name)
 
             self.imageSequencer.createSequence(input_file,frameRate,trim_start,trim_end, output_file)
@@ -141,4 +139,4 @@ class ReferenceImportDialog(QtWidgets.QDialog):
             raise e
 
 if 'name' == "__main__":
-    ReferenceImportDialog.show_dialog()
+    pass

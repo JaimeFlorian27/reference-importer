@@ -27,7 +27,6 @@ class ImageSequencer():
            process = process.split(" ")
            process = process[1][0:11]
         except Exception as e: 
-            cmds.warning(e)
             raise e
         return process
     def createSequence(self,input_file, frameRate,start_trim,end_trim, output_file):
@@ -35,7 +34,6 @@ class ImageSequencer():
         try:
             subprocess.call(command)
         except Exception as e: 
-            cmds.warning(e)
             raise e
         #Create Image Plane       
         #image_plane = cmds.imagePlane(fn = self.video_file)
