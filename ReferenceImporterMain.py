@@ -36,8 +36,6 @@ class ReferenceImportDialog(QtWidgets.QDialog):
 
     def __init__(self,parent=maya_main_window()):
         super(ReferenceImportDialog,self).__init__(parent)
-
-        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()

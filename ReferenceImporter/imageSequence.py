@@ -24,7 +24,7 @@ class ImageSequencer():
            process = subprocess.check_output(command, shell=True)
            process = str(process).strip()
            process = process.split(" ")
-           process = process[1][0:11]
+           process = process[3][0:11]
         except Exception as e: 
             raise e
         return process
