@@ -12,3 +12,16 @@ Script that automates the importing of video reference into Maya, automatically 
     from  ReferenceImporterMain import ReferencerImporterDialog
     ReferencerImporterDialog.run()
 make sure to run it using Python
+
+# Usage
+
+## for a demonstration of usage please watch the video :
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE "Demo")
+### 1. Choose a video file
+### 2. Set the desired trimming
+> Use format HH:MM:SS.ms for the timecode
+### 3. Set output sequence name and format
+### 4. Set output directory for the sequence
+### 5. (Optional) auto creation of image plane in Maya for the sequence
+### 6. Import the video!!
