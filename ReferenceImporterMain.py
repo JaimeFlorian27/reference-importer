@@ -36,6 +36,7 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
 
     def __init__(self,parent=maya_main_window()):
         super(ReferenceImporterDialog,self).__init__(parent)
+        self.setWindowTitle("Reference Importer")
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()
