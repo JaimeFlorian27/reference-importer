@@ -17,7 +17,7 @@ make sure to run it using Python
 
 ## for a demonstration of usage please watch the video :
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ObX9NU2BmZo/0.jpg)](https://www.youtube.com/watch?v=ObX9NU2BmZo "Script Walkthrough Video")
+[![Script Walkthrough Video](https://img.youtube.com/vi/ObX9NU2BmZo/0.jpg)](https://www.youtube.com/watch?v=ObX9NU2BmZo "Script Walkthrough Video")
 ### 1. Choose a video file
 ### 2. Set the desired trimming
 > Use format HH:MM:SS.ms for the timecode
