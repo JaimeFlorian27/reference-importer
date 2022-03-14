@@ -19,14 +19,14 @@ def maya_main_window():
     """
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
-class ReferenceImportDialog(QtWidgets.QDialog):
+class ReferenceImporterDialog(QtWidgets.QDialog):
 
     dlg_instance = None
 
     @classmethod
     def run(cls):
         if not cls.dlg_instance:
-            cls.dlg_instance = ReferenceImportDialog()
+            cls.dlg_instance = ReferenceImporterDialog()
 
         if cls.dlg_instance.isHidden():
             cls.dlg_instance.show()
@@ -35,7 +35,7 @@ class ReferenceImportDialog(QtWidgets.QDialog):
             cls.dlg_instance.activateWindow()
 
     def __init__(self,parent=maya_main_window()):
-        super(ReferenceImportDialog,self).__init__(parent)
+        super(ReferenceImporterDialog,self).__init__(parent)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()
