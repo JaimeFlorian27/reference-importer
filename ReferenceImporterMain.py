@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# Reference Importer v1.1, made by Jaime Florian
+# Video Demonstration: https://www.youtube.com/watch?v=ObX9NU2BmZo
+
 import os
 import sys
 libs =  os.path.abspath(os.path.dirname(__file__))
@@ -11,6 +14,7 @@ import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
 from ReferenceImporter.ui.main_dialog_ui import Ui
 from ReferenceImporter.imageSequence import ImageSequencer
+
 
 
 def maya_main_window():
@@ -36,7 +40,6 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
 
     def __init__(self,parent=maya_main_window()):
         super(ReferenceImporterDialog,self).__init__(parent)
-        self.setWindowTitle("Reference Importer")
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)

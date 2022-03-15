@@ -139,30 +139,29 @@ class Ui(object):
         self.verticalLayout_main.addWidget(self.pushButton_create_image_sequence)
 
 
-        self.retranslateUi(Dialog)
+        self.setTexts(Dialog)
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.groupBox_input.setTitle(QCoreApplication.translate("Dialog", u"Input", None))
-        self.label_video_file.setText(QCoreApplication.translate("Dialog", u"Video File", None))
-        self.pushButton_fileExplorer_input.setText(QCoreApplication.translate("Dialog", u"Open...", None))
-        self.groupBox_trim.setTitle(QCoreApplication.translate("Dialog", u"Trimming", None))
-        self.label_start_trim.setText(QCoreApplication.translate("Dialog", u"Start", None))
-        self.label_end_trim.setText(QCoreApplication.translate("Dialog", u"End", None))
-        self.groupBox_output.setTitle(QCoreApplication.translate("Dialog", u"Output", None))
-        self.label_frameRate.setText(QCoreApplication.translate("Dialog", u"Target Frame Rate", None))
-        self.checkBox_imagePlane.setText(QCoreApplication.translate("Dialog", u"Create Image Plane", None))
-        self.label_output_directory.setText(QCoreApplication.translate("Dialog", u"Output Directory", None))
-        self.pushButton_fileExplorer_output.setText(QCoreApplication.translate("Dialog", u"Open...", None))
-        self.label.setText(QCoreApplication.translate("Dialog", u"Sequence File Name", None))
-        self.comboBox.setItemText(0, QCoreApplication.translate("Dialog", u".jpg", None))
-        self.comboBox.setItemText(1, QCoreApplication.translate("Dialog", u".png", None))
-
-        self.label_2.setText(QCoreApplication.translate("Dialog", u"File Extension", None))
-        self.pushButton_create_image_sequence.setText(QCoreApplication.translate("Dialog", u"Create Image Sequence", None))
+    def setTexts(self, Dialog):
+        Dialog.setWindowTitle(u"Reference Importer v1.1")
+        self.groupBox_input.setTitle(u"Input")
+        self.label_video_file.setText(u"Video File")
+        self.pushButton_fileExplorer_input.setText(u"Open...")
+        self.groupBox_trim.setTitle(u"Trimming")
+        self.label_start_trim.setText(u"Start")
+        self.label_end_trim.setText(u"End")
+        self.groupBox_output.setTitle(u"Output")
+        self.label_frameRate.setText(u"Target Frame Rate")
+        self.checkBox_imagePlane.setText(u"Create Image Plane")
+        self.label_output_directory.setText(u"Output Directory")
+        self.pushButton_fileExplorer_output.setText(u"Open...")
+        self.label.setText(u"Sequence File Name")
+        self.comboBox.setItemText(0, u".jpg")
+        self.comboBox.setItemText(1, u".png")
+        self.label_2.setText(u"File Extension")
+        self.pushButton_create_image_sequence.setText(u"Create Image Sequence")
     # retranslateUi
 
 
