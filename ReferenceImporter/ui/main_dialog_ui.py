@@ -138,6 +138,7 @@ class Ui(object):
 
         self.verticalLayout_main.addWidget(self.pushButton_create_image_sequence)
 
+        self.setTexts(Dialog)
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
