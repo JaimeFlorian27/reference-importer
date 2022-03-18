@@ -30,7 +30,7 @@ class ImageSequencer():
             raise e
         return process
     def createSequence(self,input_file, frameRate,start_trim,end_trim, output_file):
-        command = ('"%s" -i "%s" -r %s -vf scale=1280:-1 -ss %s -to %s "%s"' % (self.ffmpeg_path,input_file,frameRate,start_trim,end_trim,output_file)).encode(self.encoding)
+        command = ('"%s" -i "%s" -r %s -vf scale=1280:-1 -q:v 3 -ss %s -to %s "%s"' % (self.ffmpeg_path,input_file,frameRate,start_trim,end_trim,output_file)).encode(self.encoding)
         try:
             subprocess.call(command)
         except Exception as e: 
