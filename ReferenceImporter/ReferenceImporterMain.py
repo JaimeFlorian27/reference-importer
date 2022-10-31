@@ -5,15 +5,14 @@
 import os
 import sys
 libs =  os.path.abspath(os.path.dirname(__file__))
-libs = os.path.join(libs,'ReferenceImporter\\lib')
+libs = os.path.join(libs,'lib')
 sys.path.append(libs)
 from PySide2 import QtCore,QtGui,QtWidgets
 import maya.cmds as cmds
 import maya.OpenMaya as om
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-from ReferenceImporter.ui.main_dialog_ui import Ui
-from ReferenceImporter.imageSequence import ImageSequencer
+from reference_importer import ImageSequencer, Ui
 
 
 
@@ -65,7 +64,9 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
         filename = self.ui.lineEdit.text()
         selected_filter = "Video File (*.mp4 *.mov *.avi *mkv);;All Files (*.*)"
         input_dialog = QtWidgets.QFileDialog(self)
-        filename = input_dialog.getOpenFileName(self,"Select Video File", filename,selected_filter)
+        filename = input_dialog.getOpenFileName(self,
+                                                "Select Video File",
+                                                filename,selected_filter)
         filename = filename[0]
 
         if filename != "":
@@ -80,7 +81,9 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
         try:
             filename = self.ui.lineEdit_output_directory.text()
             output_dialog = QtWidgets.QFileDialog(self)
-            filename = output_dialog.getExistingDirectory(self,"Select Output Path", filename)
+            filename = output_dialog.getExistingDirectory(self,
+                                                          "Select Output Path",
+                                                          filename)
             if filename[0] != "":
                 self.ui.lineEdit_output_directory.setText(filename)
         except Exception as e: 
@@ -129,7 +132,9 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
             output_name = self.ui.lineEdit_2.text()+"_%03d"+output_ext
             output_file = os.path.join(output_dir, output_name)
 
-            self.imageSequencer.createSequence(input_file,frameRate,trim_start,trim_end, output_file)
+            self.imageSequencer.createSequence(input_file,frameRate,
+                                               trim_start,trim_end,
+                                               output_file)
 
             if self.ui.checkBox_imagePlane.isChecked():
                 output_file = output_file.replace('%03d', '001')

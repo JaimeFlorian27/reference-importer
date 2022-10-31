@@ -2,13 +2,16 @@
 import sys
 import os
 import subprocess
-import maya.cmds as cmds
 
 
 
 class ImageSequencer():
 
-    def __init__(self, video_file="",output_name="", padding = "%03d" ,output_frameRate= 24):
+    def __init__(self, video_file="",
+                 output_name="", 
+                 padding = "%03d" ,
+                 output_frameRate= 24):
+        
         self.output_frameRate = output_frameRate
         self.video_file = video_file
         self.output_name= output_name
@@ -16,8 +19,11 @@ class ImageSequencer():
         self.trim_start = 0
         self.trim_end = 0
         self.encoding = 'cp1252'
-        self.ffmpeg_path = os.path.abspath(os.path.dirname(__file__)).decode(self.encoding)
-        self.ffmpeg_path = os.path.join(self.ffmpeg_path,'lib\\ffmpeg\\', 'ffmpeg').replace("\\","/")
+        self.ffmpeg_path = os.path.abspath(os.path.dirname(__file__)
+                                           ).decode(self.encoding)
+        self.ffmpeg_path = os.path.join(self.ffmpeg_path,'lib\\ffmpeg\\', 
+                                        'ffmpeg'
+                                        ).replace("\\","/")
         
     def getDuration(self, video_file):
         command = (u'"%s" -i "%s" 2>&1 | findstr "Duration"' %(self.ffmpeg_path,video_file)).encode(self.encoding)
@@ -35,9 +41,6 @@ class ImageSequencer():
             subprocess.call(command)
         except Exception as e: 
             raise e
-        #Create Image Plane       
-        #image_plane = cmds.imagePlane(fn = self.video_file)
-        #cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
 
 
 if __name__ == "__main__":
