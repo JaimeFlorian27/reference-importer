@@ -21,9 +21,11 @@ class ImageSequencer():
         self.encoding = 'cp1252'
         self.ffmpeg_path = os.path.abspath(os.path.dirname(__file__)
                                            ).decode(self.encoding)
-        self.ffmpeg_path = os.path.join(self.ffmpeg_path,'lib\\ffmpeg\\', 
-                                        'ffmpeg'
-                                        ).replace("\\","/")
+        self.ffmpeg_path = os.path.join(self.ffmpeg_path,
+                                        '..',
+                                        'lib',
+                                        'ffmpeg', 
+                                        'ffmpeg')
         
     def getDuration(self, video_file):
         command = (u'"%s" -i "%s" 2>&1 | findstr "Duration"' %(self.ffmpeg_path,video_file)).encode(self.encoding)
