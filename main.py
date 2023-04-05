@@ -31,16 +31,54 @@ class ReferenceImporterDialog(QDialog):
         self.ui.pushButton_create_image_sequence.setDisabled(True)
 
     def create_connections(self):
-        self.ui.pushButton_fileExplorer_input.clicked.connect(self.set_input)
-        self.ui.pushButton_fileExplorer_output.clicked.connect(self.set_output)
-        self.ui.pushButton_create_image_sequence.clicked.connect(
-            self.create_image_sequence
+        (
+            self.ui
+            .pushButton_fileExplorer_input
+            .clicked
+            .connect(self.set_input)
         )
-        self.ui.lineEdit_video_path.textChanged.connect(self.validate_fields)
-        self.ui.lineEdit_sequence_file_name.textChanged.connect(self.validate_fields)
-        self.ui.lineEdit_start_trim.textChanged.connect(self.validate_fields)
-        self.ui.lineEdit_end_trim.textChanged.connect(self.validate_fields)
-        self.ui.lineEdit_output_directory.textChanged.connect(self.validate_fields)
+        (
+            self.ui
+            .pushButton_fileExplorer_output
+            .clicked
+            .connect(self.set_output)
+        )
+        (
+            self.ui
+            .pushButton_create_image_sequence
+            .clicked
+            .connect(self.create_image_sequence)
+        )
+        (
+            self.ui
+            .lineEdit_video_path
+            .textChanged
+            .connect(self.validate_fields)
+        )
+        (
+            self.ui
+            .lineEdit_sequence_file_name
+            .textChanged
+            .connect(self.validate_fields)
+        )
+        (
+            self.ui
+            .lineEdit_start_trim
+            .textChanged
+            .connect(self.validate_fields)
+        )
+        (
+            self.ui
+            .lineEdit_end_trim
+            .textChanged
+            .connect(self.validate_fields)
+        )
+        (
+            self.ui
+            .lineEdit_output_directory
+            .textChanged
+            .connect(self.validate_fields)
+        )
 
     def set_input(self):
         filename = self.ui.lineEdit_video_path.text()
@@ -91,7 +129,7 @@ class ReferenceImporterDialog(QDialog):
             self.ui.pushButton_create_image_sequence.setEnabled(False)
 
     def validate_timecode(self, text):
-        timecode_rx = QtCore.QRegExp("([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]{0,2}")
+        timecode_rx = QtCore.QRegExp("([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]+")
         timecode_validator = QtGui.QRegExpValidator(timecode_rx, self)
         state = timecode_validator.validate(text, 0)
         if state[0] == QtGui.QRegExpValidator.Acceptable:
@@ -102,7 +140,7 @@ class ReferenceImporterDialog(QDialog):
 
     def create_image_sequence(self):
         try:
-            frameRate = str(self.ui.spinBox_target_frame_rate.value())
+            frame_rate = str(self.ui.spinBox_frame_rate.value())
 
             input_file = os.path.normpath(self.ui.lineEdit_video_path.text())
 
@@ -110,15 +148,15 @@ class ReferenceImporterDialog(QDialog):
             trim_end = str(self.ui.lineEdit_end_trim.text())
 
             output_dir = os.path.normpath(self.ui.lineEdit_output_directory.text())
-            output_ext = self.ui.comboBox.currentText()
+            output_ext = self.ui.comboBox_file_extension.currentText()
 
             output_name = (
                 self.ui.lineEdit_sequence_file_name.text() + "_%03d" + output_ext
             )
             output_file = os.path.join(output_dir, output_name)
 
-            self.video_processor.createSequence(
-                input_file, frameRate, trim_start, trim_end, output_file
+            self.video_processor.create_image_sequence(
+                input_file, frame_rate, trim_start, trim_end, output_file
             )
 
             if self.ui.checkBox_image_plane.isChecked():
