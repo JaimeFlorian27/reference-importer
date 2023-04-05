@@ -1,7 +1,8 @@
-from ReferenceImporterMain import ReferenceImporterDialog
+import main
+
 
 def run():
-    ReferenceImporterDialog.run()
+    main.run()
 
 
 if __name__ == "__main__":
