@@ -1,8 +1,0 @@
-{
-    "python.linting.mypyEnabled": true,
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": false,
-    "cSpell.words": [
-        "timecode"
-    ]
-}
