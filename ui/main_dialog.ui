@@ -163,6 +163,9 @@
    </item>
    <item>
     <widget class="QPushButton" name="pushButton_create_image_sequence">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Create Image Sequence</string>
      </property>

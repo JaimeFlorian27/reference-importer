@@ -22,13 +22,13 @@ class ReferenceImporterDialog(QDialog):
     )
 
     def __init__(self, parent=None) -> None:
-        super(ReferenceImporterDialog, self).__init__(parent)
+        self.ui = QtCompat.loadUi(self._ui_path, self)
         self.setWindowFlags(self.windowFlags())
+        self.create_connections()
+
         self.video_processor = VideoProcessor()
 
-        self.ui = QtCompat.loadUi(self._ui_path, self)
-        self.create_connections()
-        self.ui.pushButton_create_image_sequence.setDisabled(True)
+        super(ReferenceImporterDialog, self).__init__(parent)
 
     def create_connections(self):
         (
