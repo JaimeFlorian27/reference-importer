@@ -1,1 +1,1 @@
-from core.image_sequencer import ImageSequencer
+from core.video_Processor import VideoProcessor

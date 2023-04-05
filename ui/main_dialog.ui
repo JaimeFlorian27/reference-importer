@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>409</height>
+    <width>417</width>
+    <height>423</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,14 +21,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_input">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_video_file">
+       <widget class="QLabel" name="label_video_path">
         <property name="text">
-         <string>Video File</string>
+         <string>Video Path</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_video_path"/>
       </item>
       <item row="1" column="1">
        <widget class="QPushButton" name="pushButton_fileExplorer_input">
@@ -82,7 +82,7 @@
        <widget class="QLineEdit" name="lineEdit_output_directory"/>
       </item>
       <item row="4" column="1">
-       <widget class="QSpinBox" name="spinBox_frameRate">
+       <widget class="QSpinBox" name="spinBox_frame_rate">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -92,14 +92,14 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_frameRate">
+       <widget class="QLabel" name="label_taget_frame_rate">
         <property name="text">
          <string>Target Frame Rate</string>
         </property>
        </widget>
       </item>
       <item row="4" column="2" colspan="2">
-       <widget class="QCheckBox" name="checkBox_imagePlane">
+       <widget class="QCheckBox" name="checkBox_image_plane">
         <property name="text">
          <string>Create Image Plane</string>
         </property>
@@ -120,14 +120,14 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_sequence_file_name">
         <property name="text">
          <string>Sequence File Name</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="comboBox_file_extension">
         <item>
          <property name="text">
           <string>.jpg</string>
@@ -141,14 +141,14 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_file_extension">
         <property name="text">
          <string>File Extension</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="lineEdit_sequence_file_name"/>
       </item>
      </layout>
     </widget>
