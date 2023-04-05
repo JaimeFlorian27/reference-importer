@@ -1,1 +1,1 @@
-from core.video_Processor import VideoProcessor
+from core.video_processor import VideoProcessor

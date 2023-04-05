@@ -24,7 +24,7 @@ class ReferenceImporterDialog(QDialog):
     def __init__(self, parent=None) -> None:
         super(ReferenceImporterDialog, self).__init__(parent)
         self.setWindowFlags(self.windowFlags())
-        # self.image_sequencer = ImageSequencer()
+        self.video_processor = VideoProcessor()
 
         self.ui = QtCompat.loadUi(self._ui_path, self)
         self.create_connections()
@@ -53,7 +53,7 @@ class ReferenceImporterDialog(QDialog):
         filename = filename[0]
 
         if filename:
-            duration = self.image_sequencer.getDuration(filename)
+            duration = self.video_processor.get_duration(filename)
             self.ui.lineEdit_end_trim.setText(duration)
             self.ui.lineEdit_video_path.setText(filename)
 
@@ -117,7 +117,7 @@ class ReferenceImporterDialog(QDialog):
             )
             output_file = os.path.join(output_dir, output_name)
 
-            self.image_sequencer.createSequence(
+            self.video_processor.createSequence(
                 input_file, frameRate, trim_start, trim_end, output_file
             )
 
