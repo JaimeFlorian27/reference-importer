@@ -4,6 +4,7 @@
 
 import os
 import sys
+from typing import Optional
 
 
 from Qt import QtCore, QtGui
@@ -14,6 +15,7 @@ from Qt import QtCompat
 # import maya.OpenMaya as om
 # import maya.OpenMayaUI as omui
 from core import VideoProcessor
+from core import DccFacade
 
 
 class ReferenceImporterDialog(QDialog):
@@ -21,63 +23,33 @@ class ReferenceImporterDialog(QDialog):
         os.path.dirname(os.path.abspath(__file__)), "ui", "main_dialog.ui"
     )
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self,
+                 dcc: Optional[DccFacade] = None,
+                 video_processor=VideoProcessor(),
+                 parent=None) -> None:
+
         super(ReferenceImporterDialog, self).__init__(parent)
+
+        self.dcc = dcc
+        self.video_processor = video_processor
         self.ui = QtCompat.loadUi(self._ui_path, self)
+
         self.setWindowFlags(self.windowFlags())
         self.create_connections()
 
-        self.video_processor = VideoProcessor()
-
     def create_connections(self):
+        (self.ui.pushButton_fileExplorer_input.clicked.connect(self.set_input))
+        (self.ui.pushButton_fileExplorer_output.clicked.connect(self.set_output))
         (
-            self.ui
-            .pushButton_fileExplorer_input
-            .clicked
-            .connect(self.set_input)
+            self.ui.pushButton_create_image_sequence.clicked.connect(
+                self.create_image_sequence
+            )
         )
-        (
-            self.ui
-            .pushButton_fileExplorer_output
-            .clicked
-            .connect(self.set_output)
-        )
-        (
-            self.ui
-            .pushButton_create_image_sequence
-            .clicked
-            .connect(self.create_image_sequence)
-        )
-        (
-            self.ui
-            .lineEdit_video_path
-            .textChanged
-            .connect(self.validate_fields)
-        )
-        (
-            self.ui
-            .lineEdit_sequence_file_name
-            .textChanged
-            .connect(self.validate_fields)
-        )
-        (
-            self.ui
-            .lineEdit_start_trim
-            .textChanged
-            .connect(self.validate_fields)
-        )
-        (
-            self.ui
-            .lineEdit_end_trim
-            .textChanged
-            .connect(self.validate_fields)
-        )
-        (
-            self.ui
-            .lineEdit_output_directory
-            .textChanged
-            .connect(self.validate_fields)
-        )
+        (self.ui.lineEdit_video_path.textChanged.connect(self.validate_fields))
+        (self.ui.lineEdit_sequence_file_name.textChanged.connect(self.validate_fields))
+        (self.ui.lineEdit_start_trim.textChanged.connect(self.validate_fields))
+        (self.ui.lineEdit_end_trim.textChanged.connect(self.validate_fields))
+        (self.ui.lineEdit_output_directory.textChanged.connect(self.validate_fields))
 
     def set_input(self):
         filename = self.ui.lineEdit_video_path.text()
@@ -115,12 +87,8 @@ class ReferenceImporterDialog(QDialog):
         valid_fields.append(bool(self.ui.lineEdit_end_trim.text()))
         valid_fields.append(bool(self.ui.lineEdit_output_directory.text()))
 
-        valid_fields.append(
-            self.validate_timecode(self.ui.lineEdit_start_trim.text())
-        )
-        valid_fields.append(
-            self.validate_timecode(self.ui.lineEdit_end_trim.text())
-        )
+        valid_fields.append(self.validate_timecode(self.ui.lineEdit_start_trim.text()))
+        valid_fields.append(self.validate_timecode(self.ui.lineEdit_end_trim.text()))
 
         if all(valid_fields):
             self.ui.pushButton_create_image_sequence.setEnabled(True)
@@ -159,9 +127,9 @@ class ReferenceImporterDialog(QDialog):
             )
 
             if self.ui.checkBox_image_plane.isChecked():
-                output_file = output_file.replace("%03d", "001")
-                image_plane = cmds.imagePlane(fn=output_file)
-                cmds.setAttr("%s.useFrameExtension" % image_plane[0], True)
+                if self.dcc:
+                    self.dcc.create_image_plane(output_file)
+
         except Exception as e:
             raise e
 
