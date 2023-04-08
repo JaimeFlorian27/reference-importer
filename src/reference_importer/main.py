@@ -3,7 +3,6 @@
 # Video Demonstration: https://www.youtube.com/watch?v=ObX9NU2BmZo
 
 import os
-import sys
 from typing import Optional
 
 
@@ -38,18 +37,62 @@ class ReferenceImporterDialog(QDialog):
         self.create_connections()
 
     def create_connections(self):
-        (self.ui.pushButton_fileExplorer_input.clicked.connect(self.set_input))
-        (self.ui.pushButton_fileExplorer_output.clicked.connect(self.set_output))
         (
-            self.ui.pushButton_create_image_sequence.clicked.connect(
-                self.create_image_sequence
-            )
+            self.ui
+            .pushButton_fileExplorer_input
+            .clicked
+            .connect(self.set_input)
         )
-        (self.ui.lineEdit_video_path.textChanged.connect(self.validate_fields))
-        (self.ui.lineEdit_sequence_file_name.textChanged.connect(self.validate_fields))
-        (self.ui.lineEdit_start_trim.textChanged.connect(self.validate_fields))
-        (self.ui.lineEdit_end_trim.textChanged.connect(self.validate_fields))
-        (self.ui.lineEdit_output_directory.textChanged.connect(self.validate_fields))
+
+        (
+            self.ui
+            .pushButton_fileExplorer_output
+            .clicked
+            .connect(self.set_output)
+        )
+
+        (
+            self.ui
+            .pushButton_create_image_sequence
+            .clicked
+            .connect(self.create_image_sequence)
+        )
+
+        (
+            self.ui
+            .lineEdit_video_path
+            .textChanged
+            .connect(self.validate_fields)
+        )
+
+        (
+            self.ui
+            .lineEdit_sequence_file_name
+            .textChanged
+            .connect(self.validate_fields)
+        )
+
+        (
+            self.ui
+            .lineEdit_start_trim
+            .textChanged
+            .connect(self.validate_fields)
+        )
+
+        (
+            self.ui
+            .lineEdit_end_trim
+            .textChanged
+            .connect(self.validate_fields)
+        )
+
+        (
+            self.ui
+            .lineEdit_output_directory
+            .textChanged
+            .connect(self.validate_fields)
+        )
+
 
     def set_input(self):
         filename = self.ui.lineEdit_video_path.text()

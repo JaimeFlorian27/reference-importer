@@ -1,4 +1,4 @@
-import main
+from reference_importer import main
 
 
 def run():
