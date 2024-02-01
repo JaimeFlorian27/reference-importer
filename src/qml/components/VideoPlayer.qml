@@ -5,6 +5,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.2
 
 Item {
+    id: item
     height: 600
     width: 800
 
@@ -33,6 +34,7 @@ Item {
             layer.enabled: true
             source: "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
             fillMode: VideoOutput.PreserveAspectFit
+            notifyInterval: 16
             muted: true
 
             MouseArea {
@@ -79,6 +81,8 @@ Item {
             Layout.bottomMargin: 20
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
+
+            indicator_position: position_indicator(video.position, video.duration)
         }
 
         // navigation
