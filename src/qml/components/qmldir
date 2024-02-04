@@ -2,3 +2,4 @@ module Components
 Button 1.0 Button.qml
 VideoPlayer 1.0 VideoPlayer.qml
 VideoRangeSlider 1.0 VideoRangeSlider.qml 
+VideoPositioner 1.0 VideoPositioner.qml 

@@ -9,6 +9,7 @@ Item {
     height: 600
     width: 800
 
+
     Rectangle {
         id: video_view_bg
 
@@ -24,24 +25,18 @@ Item {
 
             x: parent.x
             y: parent.y
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.fill: parent
             focus: true
-            Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
             // apply rounded corners mask
             layer.enabled: true
-            source: "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
+            source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov"
             fillMode: VideoOutput.PreserveAspectFit
             notifyInterval: 16
             muted: true
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                    video.play();
-                }
+                onClicked: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
             }
 
             layer.effect: OpacityMask {
@@ -76,13 +71,13 @@ Item {
 
         // range slider
         VideoRangeSlider {
+            id: range_slider
             Layout.leftMargin: 20
             Layout.rightMargin: 20
             Layout.bottomMargin: 20
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
-
-            indicator_position: position_indicator(video.position, video.duration)
+            video: video
         }
 
         // navigation

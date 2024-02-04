@@ -1,89 +1,161 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
+import QtMultimedia 5.15
 
 Item {
-    // debugging rectangle
-    // Rectangle {
-    //   anchors.fill: parent
-    //   color : "#00ffffff"
-    //   border.color: "red"
-    // }
+    id: control
+    property Video video
+    property real from: 0.0
+    property real to: 1.0
 
-    id: item
+    property real min: 0.0
+    property real max: 1.0
 
-    property int indicator_position: 0
+    property real value: video.position / video.duration
+    property real position: 0.0
 
-    function position_indicator(position, duration) {
-        let x = Math.max(width * (position / duration) + control.first.handle.width, control.first.handle.x);
-        return x;
+    signal at_limit()
+    signal seek_moved()
+    signal min_moved()
+    signal max_moved()
+
+
+    onValueChanged: {position = position_at(value)}
+    onPositionChanged: {seek_handler.x = (position * width) - seek_handler.width / 2}
+
+    onMin_moved: {valueChanged(); at_limit()}
+    onMinChanged: {min_handler.x = min * width - min_handler.width / 2}
+
+    onMax_moved: {valueChanged(); at_limit()}
+    onMaxChanged: {max_handler.x = max * width - max_handler.width / 2}
+
+    onSeek_moved: {video.seek(position * video.duration)}
+
+    Connections{
+      target: video
+      function onPlaying() {
+        if (position == max || position == min){
+          video.pause()
+          seek_moved()
+        }
+      }
     }
+
+    onAt_limit: {}
+    function position_at(x){
+      let pos = (x - from) / (to - from);
+      pos = Math.min(Math.max(pos, min), max);
+      return pos;
+      }
 
     height: 40
     width: 800
 
-    RangeSlider {
-        id: control
+     // debugging rectangle
+     // Rectangle {
+     //   anchors.fill: parent
+     //   color : "#00ffffff"
+     //   border.color: "red"
+     // }
 
+
+    Rectangle{
+      id: bg
+
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+
+      height: 4
+      radius: 4
+      }
+
+    // min handler
+    Item {
+      id: min_handler
+      height: 24
+      width: 4
+      property real previous_position: 0.0
+      anchors.verticalCenter: parent.verticalCenter
+
+      Rectangle{
         anchors.fill: parent
-        from: 1
-        to: 100
-        first.value: 0
-        second.value: 100
-
-        // Seek positioner
-        Item {
-            id: seek_indicator
-
-            Rectangle {
-                width: 4
-                height: 40
-                x: indicator_position
-                y: control.topPadding + control.availableHeight / 2 - height / 2
+        radius: 4
+        }
+      DragHandler{
+        id: min_drag_handler
+        target: null
+        onActiveChanged: {
+            if (active){
+              min_handler.previous_position = min
             }
-
+          }
+        onTranslationChanged: (point) => {
+          min = min_handler.previous_position + translation.x / control.width
+          control.min_moved()
         }
+        }
+      }
 
-        background: Rectangle {
-            x: control.leftPadding
-            y: control.topPadding + control.availableHeight / 2 - height / 2
-            implicitWidth: 200
-            implicitHeight: 4
-            width: control.availableWidth
-            height: implicitHeight
-            radius: 2
-            color: "#bdbebf"
+    // min handler
+    Item {
+      id: max_handler
+      height: 24
+      width: 4
+      property real previous_position: 0.0
+      anchors.verticalCenter: parent.verticalCenter
+      x: to * parent.width
 
-            Rectangle {
-                x: control.first.visualPosition * parent.width
-                width: control.second.visualPosition * parent.width - x
-                height: parent.height
-                color: "#21be2b"
-                radius: 2
+      Rectangle{
+        anchors.fill: parent
+        radius: 4
+        }
+      DragHandler{
+        id: max_drag_handler
+        target: null
+        onActiveChanged: {
+            if (active){
+              max_handler.previous_position = max
             }
+          }
+        onTranslationChanged: (point) => {
+          max = max_handler.previous_position + translation.x / control.width
+          control.max_moved()
+        }
+        }
+      }
 
+    // seek_handler
+    Item {
+      id: seek_handler
+      property real previous_position: 0.0
+      height: 16
+      width: 16
+      anchors.verticalCenter: parent.verticalCenter
+
+
+      Rectangle{
+        anchors.fill: parent
+        radius: 4
+        color: "red"
         }
 
-        first.handle: Rectangle {
-            x: control.leftPadding + control.first.visualPosition * (control.availableWidth - width)
-            y: control.topPadding + control.availableHeight / 2 - height / 2
-            implicitWidth: 10
-            implicitHeight: 26
-            radius: 4
-            color: control.first.pressed ? "#f0f0f0" : "#f6f6f6"
-            border.color: "#bdbebf"
+      DragHandler{
+        id: seek_drag_handler
+        target: null
+        onActiveChanged: {
+            if (active){
+              seek_handler.previous_position = position
+            }
+            else{
+              value = Qt.binding(function() {return video.position / video.duration})
+              }
+          }
+        onTranslationChanged: (point) => {
+          value = seek_handler.previous_position + translation.x / control.width
+          control.seek_moved()
         }
-
-        second.handle: Rectangle {
-            x: control.leftPadding + control.second.visualPosition * (control.availableWidth - width)
-            y: control.topPadding + control.availableHeight / 2 - height / 2
-            implicitWidth: 10
-            implicitHeight: 26
-            radius: 4
-            color: control.second.pressed ? "#f0f0f0" : "#f6f6f6"
-            border.color: "#bdbebf"
         }
-
-    }
-
+      }
 }

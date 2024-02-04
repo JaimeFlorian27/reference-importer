@@ -1,0 +1,8 @@
+IF it's playing:
+
+the seek indicator should be either at the calculated position
+
+IF it's not playing:
+
+the seek indicator should be either at the min between its current position or the 
+position of the first handle.
