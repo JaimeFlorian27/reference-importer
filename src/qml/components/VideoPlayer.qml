@@ -8,6 +8,7 @@ Item {
     id: item
     width: 960
     height: 540
+    property string source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov";
 
 
     Rectangle {
@@ -20,9 +21,12 @@ Item {
         radius: 8
         clip: true
 
+    }
+
+    Item{
+      anchors.fill: parent
         Video {
             id: video
-
             x: parent.x
             y: parent.y
             anchors.fill: parent
@@ -30,7 +34,6 @@ Item {
             autoPlay: true
             muted: true
 
-            // avoids a segmentation fault while seeking with no loaded frame...
             onStatusChanged: {
                 if (status == MediaPlayer.Buffered)
                 {
@@ -39,8 +42,7 @@ Item {
                 }
             }
             // apply rounded corners mask
-            layer.enabled: true
-            source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov"
+            source: item.source
             fillMode: VideoOutput.PreserveAspectFit
             flushMode: VideoOutput.FirstFrame
             notifyInterval: 50
@@ -50,22 +52,7 @@ Item {
                 anchors.fill: parent
                 onClicked: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
             }
-
-            layer.effect: OpacityMask {
-
-                maskSource: Rectangle {
-                    x: video_view_bg.x
-                    y: video_view_bg.y
-                    width: video_view_bg.width - 1
-                    height: video_view_bg.height - 1
-                    radius: video_view_bg.radius
-                }
-
-            }
-
         }
-
-    }
     //time slider
 
     ColumnLayout {
@@ -80,24 +67,55 @@ Item {
 
             Layout.fillHeight: true
         }
-
+        Item{
+          height: 120
+          id: playback_controls
+          Layout.fillWidth: true
+          Rectangle {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#00ffffff" }
+                GradientStop { position: 0.9; color: "#000000" }
+            }
+        }
+        ColumnLayout{
+          anchors.fill: parent
         // range slider
         VideoRangeSlider {
+          Layout.leftMargin: 40
+          Layout.rightMargin: 40
+          Layout.bottomMargin: 20
+          Layout.fillWidth: true
             id: range_slider
+            video: video
+        }
+        // navigation
+        RowLayout {
             Layout.leftMargin: 40
             Layout.rightMargin: 40
             Layout.bottomMargin: 20
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
-            video: video
+
+            TextField{id: min_timestamp; text: range_slider.min}
+            Item{Layout.fillWidth: true}
+            TextField{id: current_timestamp; text: range_slider.position}
+            Item{Layout.fillWidth: true}
+            TextField{id: max_timestamp; text: range_slider.max}
         }
-        // navigation
-        Item {
-          height: 40
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignBottom
-        }
+      }
+    }
+}
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: video_view_bg.width - 10
+                    height: video_view_bg.height - 10
+                    radius: video_view_bg.radius
+                }
+
+            }
 
     }
-
 }

@@ -92,6 +92,13 @@ Item {
     onPositionChanged: {
         seek_handler.x = (position * width) - seek_handler.width / 2;
     }
+
+    onWidthChanged: {
+        positionChanged();
+        minChanged();
+        maxChanged();
+      }
+
     // min signals
     onMin_moved: {
         if (positioner_at_min_limit()) {
