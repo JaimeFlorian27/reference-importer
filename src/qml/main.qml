@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.2
 import QtQuick.Window 2.15
 
 Window {
-    width: 1133
-    height: 607
+    minimumWidth: 1280
+    minimumHeight: 594
     visible: true
     title: qsTr("Reference Importer")
     color: "#041620"
@@ -49,10 +49,12 @@ Window {
 
             // Video
             VideoPlayer {
-                Layout.preferredWidth: 800
-                Layout.preferredHeight: 600
+                Layout.preferredWidth: 960
+                Layout.preferredHeight: 540
+                Layout.minimumHeight: 540
+                Layout.minimumWidth: 960
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                onWidthChanged:{Layout.preferredHeight = width /(16/9)}
             }
 
             // Parameters column

@@ -6,8 +6,8 @@ import QtQuick.Layouts 1.2
 
 Item {
     id: item
-    height: 600
-    width: 800
+    width: 960
+    height: 540
 
 
     Rectangle {
@@ -27,12 +27,24 @@ Item {
             y: parent.y
             anchors.fill: parent
             focus: true
+            autoPlay: true
+            muted: true
+
+            // avoids a segmentation fault while seeking with no loaded frame...
+            onStatusChanged: {
+                if (status == MediaPlayer.Buffered)
+                {
+                    pause()
+                    muted = false
+                }
+            }
             // apply rounded corners mask
             layer.enabled: true
             source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov"
             fillMode: VideoOutput.PreserveAspectFit
-            notifyInterval: 16
-            muted: true
+            flushMode: VideoOutput.FirstFrame
+            notifyInterval: 50
+            // muted: true
 
             MouseArea {
                 anchors.fill: parent
@@ -72,17 +84,16 @@ Item {
         // range slider
         VideoRangeSlider {
             id: range_slider
-            Layout.leftMargin: 20
-            Layout.rightMargin: 20
+            Layout.leftMargin: 40
+            Layout.rightMargin: 40
             Layout.bottomMargin: 20
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
             video: video
         }
-
         // navigation
         Item {
-            height: 40
+          height: 40
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
         }
