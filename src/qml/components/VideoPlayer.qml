@@ -10,7 +10,6 @@ Item {
     height: 540
     property string source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov";
 
-
     Rectangle {
         id: video_view_bg
 
@@ -47,10 +46,13 @@ Item {
             flushMode: VideoOutput.FirstFrame
             notifyInterval: 50
             // muted: true
-
             MouseArea {
                 anchors.fill: parent
-                onClicked: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+                onClicked: {
+                  forceActiveFocus()
+                  video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+                }
+
             }
         }
     //time slider
@@ -97,25 +99,43 @@ Item {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
 
-            TextField{id: min_timestamp; text: range_slider.min}
+            TimecodeTextInput{
+              id: min_timestamp
+              position: range_slider.min * video.duration
+
+
+              onAccepted: {
+                  video.seek(timecode_to_position(text))
+                }
+            }
             Item{Layout.fillWidth: true}
-            TextField{id: current_timestamp; text: range_slider.position}
+            TimecodeTextInput{
+              id: current_timestamp
+              position: video.position
+
+              onAccepted: {
+                  video.seek(timecode_to_position(text))
+                }
+
+            }
             Item{Layout.fillWidth: true}
-            TextField{id: max_timestamp; text: range_slider.max}
+            TimecodeTextInput{id: max_timestamp; 
+              position: range_slider.max * video.duration
+            }
         }
       }
     }
 }
 
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: video_view_bg.width - 10
-                    height: video_view_bg.height - 10
-                    radius: video_view_bg.radius
-                }
-
-            }
+    layer.enabled: true
+    layer.effect: OpacityMask {
+        maskSource: Rectangle {
+            width: video_view_bg.width - 10
+            height: video_view_bg.height - 10
+            radius: video_view_bg.radius
+        }
 
     }
+
+  }
 }

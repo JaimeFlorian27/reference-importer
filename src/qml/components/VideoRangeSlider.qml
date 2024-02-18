@@ -170,6 +170,16 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         height: 4
         radius: 4
+        color: "#092F44"
+    }
+
+    Rectangle {
+        id: active_bg
+        color: "#354bf2"
+        anchors.left: min_handler.left
+        anchors.right: max_handler.right
+        anchors.verticalCenter: parent.verticalCenter
+        height: 4
     }
 
     // min handler
@@ -178,13 +188,15 @@ Item {
 
         property real previous_position: 0
 
-        height: 24
-        width: 24
+        height: 16
+        width: 16
         anchors.verticalCenter: parent.verticalCenter
 
         Rectangle {
             width: parent.width
             height: parent.height
+            border.width: 1
+            border.color: "white"
             x: -width
             anchors.verticalCenter: parent.veticalCenter
             radius: 4
@@ -199,7 +211,9 @@ Item {
 
             }
             onTranslationChanged: (point) => {
-                min = min_handler.previous_position + translation.x / control.width;
+                var current_pos = min_handler.previous_position + translation.x / control.width;
+                current_pos = Math.min(control.max, Math.max(current_pos, 0))
+                min = current_pos
                 control.min_moved();
             }
         }
@@ -212,11 +226,11 @@ Item {
         id: max_handler
 
         property real previous_position: 0
-        height: 24
-        width: 24
+        height: 16
+        width: 16
 
         anchors.verticalCenter: parent.verticalCenter
-        x: to * parent.width
+        x: control.to * parent.width
 
         Rectangle {
             radius: 4
@@ -231,11 +245,13 @@ Item {
                 target: null
                 onActiveChanged: {
                     if (active)
-                        max_handler.previous_position = max;
+                        max_handler.previous_position = control.max;
 
                 }
                 onTranslationChanged: {
-                    max = max_handler.previous_position + translation.x / control.width;
+                    var current_pos = max_handler.previous_position + translation.x / control.width;
+                    current_pos = Math.max(control.min, Math.min(current_pos, 1))
+                    max = current_pos
                     control.max_moved();
                 }
             }
@@ -256,14 +272,14 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: 4
-            color: "red"
+            color: "white"
             DragHandler {
                 id: seek_drag_handler
 
                 target: null
                 onActiveChanged: {
                     if (active)
-                        seek_handler.previous_position = position;
+                        seek_handler.previous_position = control.position;
                     else
                         value = Qt.binding(function() {
                             return video.position / video.duration;
