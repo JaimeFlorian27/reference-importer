@@ -7,6 +7,7 @@ TextField{
     id: item
 
     property real position
+    selectByMouse: true
 
     horizontalAlignment: TextInput.AlignHCenter
     function position_to_timecode(position){
@@ -46,7 +47,11 @@ TextField{
 
     color: "#FFFFFF"
     background: Rectangle {
+        anchors.horizontalCenter : parent.horizontalCenter
+        anchors.left: parent.left
         anchors.fill: parent
+        width: 100
+        implicitWidth: 100
         color: "#061F2D"
         radius: 8
         border.width: 2

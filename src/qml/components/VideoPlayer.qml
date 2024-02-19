@@ -10,6 +10,35 @@ Item {
     height: 540
     property string source: "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov";
 
+    Item{
+      id: animation_state
+      state : ""
+      states: [
+          State {
+            name : "hovered"; when: item_mouse_area.containsMouse
+            PropertyChanges {
+              target: video_params 
+              opacity: 1.0
+            }
+          }
+      ]
+      transitions:[
+      Transition{
+        from: ""; to: "hovered";
+        NumberAnimation{properties: "opacity"; easing.type: Easing.OutQuad; duration: 100}
+        },
+      Transition{
+        from: "hovered"; to: "";
+        SequentialAnimation{
+          PauseAnimation { duration: 800 }
+          NumberAnimation{properties: "opacity"; easing.type: Easing.OutQuad; duration: 300}
+
+
+          }
+        }
+      ]
+    }
+
     Rectangle {
         id: video_view_bg
 
@@ -61,6 +90,8 @@ Item {
         id: video_params
 
         anchors.fill: parent
+        layer.enabled: true
+        opacity: 0.0
         spacing: 8
 
         // filler to allow the other components to bunch at the bottom.
@@ -119,7 +150,7 @@ Item {
 
             }
             Item{Layout.fillWidth: true}
-            TimecodeTextInput{id: max_timestamp; 
+            TimecodeTextInput{id: max_timestamp; width: 100; implicitWidth: 100
               position: range_slider.max * video.duration
             }
         }
@@ -130,12 +161,20 @@ Item {
     layer.enabled: true
     layer.effect: OpacityMask {
         maskSource: Rectangle {
-            width: video_view_bg.width - 10
-            height: video_view_bg.height - 10
+            width: video_view_bg.width
+            height: video_view_bg.height
             radius: video_view_bg.radius
         }
 
     }
+
+    MouseArea {
+        id: item_mouse_area
+        anchors.fill: parent
+        hoverEnabled: true
+        propagateComposedEvents: true
+    }
+
 
   }
 }
