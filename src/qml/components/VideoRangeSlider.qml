@@ -92,13 +92,11 @@ Item {
     onPositionChanged: {
         seek_handler.x = (position * width) - seek_handler.width / 2;
     }
-
     onWidthChanged: {
         positionChanged();
         minChanged();
         maxChanged();
-      }
-
+    }
     // min signals
     onMin_moved: {
         if (positioner_at_min_limit()) {
@@ -122,12 +120,8 @@ Item {
     }
     // seek moved
     onSeek_moved: {
-        if (video.availability == MediaPlayer.Available && 
-            video.error == MediaPlayer.NoError){
-
+        if (video.availability == MediaPlayer.Available && video.error == MediaPlayer.NoError)
             video.seek(position * video.duration);
-
-          }
 
     }
     height: 40
@@ -149,6 +143,7 @@ Item {
                 video.seek(min * video.duration);
 
         }
+
         target: video
     }
 
@@ -175,6 +170,7 @@ Item {
 
     Rectangle {
         id: active_bg
+
         color: "#354bf2"
         anchors.left: min_handler.left
         anchors.right: max_handler.right
@@ -201,24 +197,25 @@ Item {
             anchors.verticalCenter: parent.veticalCenter
             radius: 4
 
-        DragHandler {
-            id: min_drag_handler
+            DragHandler {
+                id: min_drag_handler
 
-            target: null
-            onActiveChanged: {
-                if (active)
-                    min_handler.previous_position = min;
+                target: null
+                onActiveChanged: {
+                    if (active)
+                        min_handler.previous_position = min;
 
+                }
+                onTranslationChanged: (point) => {
+                    var current_pos = min_handler.previous_position + translation.x / control.width;
+                    current_pos = Math.min(control.max, Math.max(current_pos, 0));
+                    min = current_pos;
+                    control.min_moved();
+                }
             }
-            onTranslationChanged: (point) => {
-                var current_pos = min_handler.previous_position + translation.x / control.width;
-                current_pos = Math.min(control.max, Math.max(current_pos, 0))
-                min = current_pos
-                control.min_moved();
-            }
+
         }
 
-        }
     }
 
     // max handler
@@ -226,9 +223,9 @@ Item {
         id: max_handler
 
         property real previous_position: 0
+
         height: 16
         width: 16
-
         anchors.verticalCenter: parent.verticalCenter
         x: control.to * parent.width
 
@@ -250,13 +247,14 @@ Item {
                 }
                 onTranslationChanged: {
                     var current_pos = max_handler.previous_position + translation.x / control.width;
-                    current_pos = Math.max(control.min, Math.min(current_pos, 1))
-                    max = current_pos
+                    current_pos = Math.max(control.min, Math.min(current_pos, 1));
+                    max = current_pos;
                     control.max_moved();
                 }
             }
 
         }
+
     }
 
     // seek_handler
@@ -273,6 +271,7 @@ Item {
             anchors.fill: parent
             radius: 4
             color: "white"
+
             DragHandler {
                 id: seek_drag_handler
 
@@ -282,15 +281,17 @@ Item {
                         seek_handler.previous_position = control.position;
                     else
                         value = Qt.binding(function() {
-                            return video.position / video.duration;
-                        });
+                        return video.position / video.duration;
+                    });
                 }
                 onTranslationChanged: {
                     value = seek_handler.previous_position + translation.x / control.width;
                     control.seek_moved();
                 }
             }
+
         }
+
     }
 
 }
