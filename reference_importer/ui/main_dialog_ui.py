@@ -8,9 +8,12 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+# Use Qt.py to support multiple Qt versions.
+# Should already be in sys.path when running through ReferenceImporterMain.py.
+
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt.QtWidgets import *
 
 
 class Ui(object):
@@ -145,7 +148,7 @@ class Ui(object):
     # setupUi
 
     def setTexts(self, Dialog):
-        Dialog.setWindowTitle(u"Reference Importer v1.1")
+        Dialog.setWindowTitle(u"Reference Importer v1.1.2")
         self.groupBox_input.setTitle(u"Input")
         self.label_video_file.setText(u"Video File")
         self.pushButton_fileExplorer_input.setText(u"Open...")

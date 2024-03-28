@@ -1,4 +1,4 @@
-from ReferenceImporterMain import ReferenceImporterDialog
+from .ReferenceImporterMain import ReferenceImporterDialog
 
 def run():
     ReferenceImporterDialog.run()

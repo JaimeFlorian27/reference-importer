@@ -9,8 +9,8 @@ Script that automates the importing of video reference into Maya, automatically 
 ## 2. Copy the contents of the zip to you Maya scripts folder
 >found under 'Documents/maya/***InsertMayaVerion***/scripts'
 ## 2. Run the following command in Maya
-    from  ReferenceImporterMain import ReferenceImporterDialog
-    ReferenceImporterDialog.run()
+    import reference_importer
+    reference_importer.run()
 make sure to run it using Python
 
 # Usage

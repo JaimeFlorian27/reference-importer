@@ -2,17 +2,26 @@
 # Reference Importer v1.1, made by Jaime Florian
 # Video Demonstration: https://www.youtube.com/watch?v=ObX9NU2BmZo
 
-import os
 import sys
-libs =  os.path.abspath(os.path.dirname(__file__))
-libs = os.path.join(libs,'lib')
-sys.path.append(libs)
-from PySide2 import QtCore,QtGui,QtWidgets
-import maya.cmds as cmds
-import maya.OpenMaya as om
-import maya.OpenMayaUI as omui
-from shiboken2 import wrapInstance
-from reference_importer import ImageSequencer, Ui
+from pathlib import Path
+
+VENDOR_PATH =  Path(__file__).parent.resolve() / "vendor"
+sys.path.insert(0, str(VENDOR_PATH))
+
+import os
+import re
+from Qt import QtCore,QtWidgets
+from Qt.QtCompat import wrapInstance
+
+try:
+    import maya.cmds as cmds
+    import maya.OpenMaya as om
+    import maya.OpenMayaUI as omui
+    IN_MAYA = True
+except ImportError:
+    IN_MAYA = False
+
+from .reference_importer import ImageSequencer, Ui
 
 
 
@@ -20,30 +29,45 @@ def maya_main_window():
     """
     Return the Maya main window widget as a Python object
     """
+    if not IN_MAYA:
+        return None
+
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
 class ReferenceImporterDialog(QtWidgets.QDialog):
 
     dlg_instance = None
+    qapp_instance = None
 
     @classmethod
     def run(cls):
-        if not cls.dlg_instance:
-            cls.dlg_instance = ReferenceImporterDialog()
+        if IN_MAYA:
+            if not cls.dlg_instance:
+                cls.dlg_instance = ReferenceImporterDialog()
 
-        if cls.dlg_instance.isHidden():
-            cls.dlg_instance.show()
-        else:
-            cls.dlg_instance.raise_()
-            cls.dlg_instance.activateWindow()
+            if cls.dlg_instance.isHidden():
+                cls.dlg_instance.show()
+            else:
+                cls.dlg_instance.raise_()
+                cls.dlg_instance.activateWindow()
+            return
 
-    def __init__(self,parent=maya_main_window()):
+        if not cls.qapp_instance:
+            cls.qapp_instance = QtWidgets.QApplication(sys.argv)
+
+        dialog = ReferenceImporterDialog()
+        dialog.show()
+        cls.qapp_instance.exec_()
+
+    def __init__(self, parent=maya_main_window()):
         super(ReferenceImporterDialog,self).__init__(parent)
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.imageSequencer = ImageSequencer()
         self.ui = Ui(self)
         self.CreateConnections()
         self.ui.pushButton_create_image_sequence.setDisabled(True)
+        if not IN_MAYA:
+            self.ui.checkBox_imagePlane.setDisabled(True)
 
     def CreateConnections(self):
         self.ui.pushButton_fileExplorer_input.clicked.connect(self.SetInput)
@@ -107,14 +131,13 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
         except Exception as e: 
             raise e
 
-    def ValidateTimecode(self, text, ):
-        timecode_rx = QtCore.QRegExp('([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]{0,2}')
-        timecode_validator = QtGui.QRegExpValidator(timecode_rx, self)
-        state = timecode_validator.validate(text,0)
-        if state[0] == QtGui.QRegExpValidator.Acceptable :
-            return True
 
-        else : 
+    def ValidateTimecode(self, text):
+        timecode_rx = r'([0-9]{2}[:]){1,2}[0-9]{2}[.]?[0-9]{0,2}'
+        state = re.fullmatch(timecode_rx, text)
+        if state:
+            return True
+        else:
             return False
 
     def CreateImageSequence(self):
@@ -136,12 +159,12 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
                                                trim_start,trim_end,
                                                output_file)
 
-            if self.ui.checkBox_imagePlane.isChecked():
+            if self.ui.checkBox_imagePlane.isChecked() and IN_MAYA:
                 output_file = output_file.replace('%03d', '001')
                 image_plane = cmds.imagePlane(fn = output_file)
                 cmds.setAttr("%s.useFrameExtension"%image_plane[0],True)
         except Exception as e: 
             raise e
 
-if 'name' == "__main__":
-    pass
+if __name__ == "__main__":
+    ReferenceImporterDialog.run()
