@@ -7,16 +7,20 @@ TextField {
     id: item
 
     property real radius: 8
-    // bg
-    property color border_default_color: "#0B2E41"
-    property color border_hovered_color: "#323232"
-    property color border_pressed_color: "#2B2B2B"
-    property color border_disabled_color: "#ffffff"
-    // border
-    property color default_color: "#2B2B2B"
-    property color hovered_color: "#323232"
-    property color pressed_color: "#2B2B2B"
-    property color disabled_color: "#ffffff"
+
+
+
+    // bg color
+    property color default_color : "transparent"
+    property color hovered_color : "transparent"
+    property color pressed_color : "transparent"
+    property color disabled_color : "transparent"
+
+    // border color
+    property color border_default_color : "#0B2E41"
+    property color border_hovered_color : "#2B424F"
+    property color border_pressed_color : "#2B424F"
+    property color border_disabled_color : "transparent"
 
     hoverEnabled: true
     color: "white"

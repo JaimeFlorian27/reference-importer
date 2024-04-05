@@ -87,14 +87,8 @@ Item {
                 y: parent.y
                 anchors.fill: parent
                 focus: true
-                autoPlay: true
+                autoPlay: false
                 muted: true
-                onStatusChanged: {
-                    if (status == MediaPlayer.Buffered) {
-                        pause();
-                        muted = false;
-                    }
-                }
                 // apply rounded corners mask
                 source: item.source
                 fillMode: VideoOutput.PreserveAspectFit

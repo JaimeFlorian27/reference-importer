@@ -8,7 +8,7 @@ Window {
     width: 1280
     height: 720
     visible: true
-    title: qsTr("Reference Importer")
+    title: qsTr("Reference Importer 2.0")
     color: "#041620"
 
     ColumnLayout {
@@ -23,20 +23,18 @@ Window {
           Layout.rightMargin: 20
           Layout.fillWidth: true
 
-          // bg color
-          default_color : "transparent"
-          hovered_color : "transparent"
-          pressed_color : "transparent"
-          disabled_color : "transparent"
-
-          // border color
-          border_default_color : "#0B2E41"
-          border_hovered_color : "#2B424F"
-          border_pressed_color : "#2B424F"
-          border_disabled_color : "transparent"
-
           height: 30
-          text : "/home/jflorian/Downloads/big_buck_bunny_720p_h264.mov"
+          text : "/Users/yunzhang/Downloads/BigBuckBunny_320x180.mp4"
+          FileDialogButton{
+              anchors.verticalCenter: parent.verticalCenter
+              anchors.right: parent.right
+              anchors.rightMargin: 2
+              height: parent.height - 4
+              
+              file_dialog.onAccepted: {
+                    video_file.text = file_dialog.fileUrl
+                  }
+              }
 
           }
 
@@ -60,6 +58,7 @@ Window {
                 clip: true
 
                 ExportPanel{
+                  visible: false
                   anchors.centerIn: video_player
 
                   }

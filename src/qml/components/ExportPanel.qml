@@ -17,6 +17,7 @@ Item {
 
     RowLayout {
         anchors.fill: parent
+        anchors.margins: 10
 
         ColumnLayout {
             Text {

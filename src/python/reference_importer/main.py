@@ -15,7 +15,7 @@ def main() -> int:
     app: QGuiApplication = QGuiApplication(sys.argv)
     engine: QQmlApplicationEngine = QQmlApplicationEngine()
 
-    source_dir: Path = Path(__file__).parent.parent.parent
+    source_dir: Path = Path(__file__).resolve().parent.parent.parent
     qml_dir: Path = Path(source_dir / "qml")
     main_qml_path: Path = Path(qml_dir / "main.qml")
 
