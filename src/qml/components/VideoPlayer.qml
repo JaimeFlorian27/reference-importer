@@ -91,6 +91,10 @@ Item {
                 muted: true
                 // apply rounded corners mask
                 source: item.source
+                onSourceChanged: {
+                    range_slider.min = 0;
+                    range_slider.max = 1;
+                }
                 fillMode: VideoOutput.PreserveAspectFit
                 flushMode: VideoOutput.FirstFrame
                 notifyInterval: 50
