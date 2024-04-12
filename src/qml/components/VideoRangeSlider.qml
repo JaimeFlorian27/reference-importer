@@ -176,6 +176,54 @@ Item {
         anchors.right: max_handler.right
         anchors.verticalCenter: parent.verticalCenter
         height: 4
+
+        Item {
+            id: animation_states
+
+            states: [
+                State {
+                    name: "hovered"
+                    when: active_bg_mouse_area.containsMouse
+
+                    PropertyChanges {
+                        target: active_bg
+                        height: 6
+                    }
+
+                }
+            ]
+            transitions: [
+                Transition {
+                    from: "*"
+                    to: "*"
+
+                    NumberAnimation {
+                        target: active_bg
+                        property: "height"
+                        duration: 150
+                        easing.type: Easing.OutQuad
+                    }
+
+                }
+            ]
+        }
+
+        MouseArea {
+            id: active_bg_mouse_area
+
+            anchors.fill: parent
+            anchors.margins: -8
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onClicked: {
+                value = (mouse.x + (min * control.width) + anchors.margins) / control.width;
+                control.seek_moved();
+                value = Qt.binding(function() {
+                    return video.position / video.duration;
+                });
+            }
+        }
+
     }
 
     // min handler
