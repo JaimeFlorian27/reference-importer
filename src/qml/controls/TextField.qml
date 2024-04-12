@@ -23,6 +23,7 @@ TextField {
     property color border_disabled_color : "transparent"
 
     hoverEnabled: true
+    selectByMouse: true
     color: "white"
 
     Item {

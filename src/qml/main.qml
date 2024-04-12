@@ -16,27 +16,17 @@ Window {
         spacing: 10
         Layout.leftMargin: 24
 
-        TextField{
-          id: video_file
-          Layout.topMargin: 16
-          Layout.leftMargin: 20
-          Layout.rightMargin: 20
-          Layout.fillWidth: true
+        FileTextField {
+            id: video_file
 
-          height: 30
-          text : "/Users/yunzhang/Downloads/BigBuckBunny_320x180.mp4"
-          FileDialogButton{
-              anchors.verticalCenter: parent.verticalCenter
-              anchors.right: parent.right
-              anchors.rightMargin: 2
-              height: parent.height - 4
-              
-              file_dialog.onAccepted: {
-                    video_file.text = file_dialog.fileUrl
-                  }
-              }
-
-          }
+            Layout.topMargin: 16
+            Layout.leftMargin: 20
+            Layout.rightMargin: 20
+            Layout.fillWidth: true
+            file_dialog.onAccepted: {
+                video_file.text = file_dialog.fileUrl;
+            }
+        }
 
         RowLayout {
             spacing: 10
@@ -50,6 +40,7 @@ Window {
             // Video
             VideoPlayer {
                 id: video_player
+
                 Layout.preferredWidth: 960
                 Layout.preferredHeight: 540
                 Layout.fillWidth: true
@@ -57,14 +48,14 @@ Window {
                 source: video_file.text
                 clip: true
 
-                ExportPanel{
-                  visible: false
-                  anchors.centerIn: video_player
+                ExportPanel {
+                    visible: false
+                    anchors.centerIn: video_player
+                }
 
-                  }
             }
-        }
 
+        }
 
     }
 

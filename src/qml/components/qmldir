@@ -5,3 +5,4 @@ VideoRangeSlider 1.0 VideoRangeSlider.qml
 VideoPositioner 1.0 VideoPositioner.qml 
 TimecodeTextInput 1.0 TimecodeTextInput.qml 
 ExportPanel 1.0 ExportPanel.qml 
+FileTextField 1.0 FileTextField.qml 
