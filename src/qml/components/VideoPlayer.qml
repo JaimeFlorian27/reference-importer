@@ -8,6 +8,7 @@ Item {
     id: item
 
     property string source
+    property alias export_button: export_button
 
     width: 960
     height: 540
@@ -184,6 +185,7 @@ Item {
                             }
 
                             Button {
+                                id: export_button
                                 anchors.right: parent.right
                                 height: 36
                                 text: "Export..."

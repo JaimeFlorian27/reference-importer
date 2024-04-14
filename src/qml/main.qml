@@ -23,9 +23,6 @@ Window {
             Layout.leftMargin: 20
             Layout.rightMargin: 20
             Layout.fillWidth: true
-            file_dialog.onAccepted: {
-                video_file.text = file_dialog.fileUrl;
-            }
         }
 
         RowLayout {
@@ -48,9 +45,15 @@ Window {
                 source: video_file.text
                 clip: true
 
+                export_button.onClicked: {
+                    export_panel.visible = true
+
+                    }
+
                 ExportPanel {
-                    visible: false
-                    anchors.centerIn: video_player
+                    id: export_panel
+                    visible: true
+                    anchors.fill: parent
                 }
 
             }
