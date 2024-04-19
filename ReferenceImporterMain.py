@@ -3,12 +3,17 @@
 # Video Demonstration: https://www.youtube.com/watch?v=ObX9NU2BmZo
 
 import sys
+import os
+import platform
 from pathlib import Path
+
+# Allow standalone to show in macOS
+if platform.system() == "Darwin":
+    os.environ["QT_MAC_WANTS_LAYER"] = "1"
 
 VENDOR_PATH =  Path(__file__).parent.resolve() / "vendor"
 sys.path.insert(0, str(VENDOR_PATH))
 
-import os
 import re
 from Qt import QtCore,QtWidgets
 from Qt.QtCompat import wrapInstance
@@ -21,7 +26,7 @@ try:
 except ImportError:
     IN_MAYA = False
 
-from .reference_importer import ImageSequencer, Ui
+from .reference_importer_main import ImageSequencer, Ui
 
 
 
@@ -94,7 +99,7 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
         filename = filename[0]
 
         if filename != "":
-            duration = self.imageSequencer.getDuration(filename)
+            duration = self.imageSequencer.get_duration(filename)
             self.ui.lineEdit_end_trim.setText(duration)
             self.ui.lineEdit.setText(filename)
     def SetOutput(self):
@@ -155,7 +160,7 @@ class ReferenceImporterDialog(QtWidgets.QDialog):
             output_name = self.ui.lineEdit_2.text()+"_%03d"+output_ext
             output_file = os.path.join(output_dir, output_name)
 
-            self.imageSequencer.createSequence(input_file,frameRate,
+            self.imageSequencer.create_sequence(input_file,frameRate,
                                                trim_start,trim_end,
                                                output_file)
 
