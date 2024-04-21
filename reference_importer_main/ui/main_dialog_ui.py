@@ -148,7 +148,7 @@ class Ui(object):
     # setupUi
 
     def setTexts(self, Dialog):
-        Dialog.setWindowTitle(u"Reference Importer v1.1.2")
+        Dialog.setWindowTitle(u"Reference Importer v1.2.0")
         self.groupBox_input.setTitle(u"Input")
         self.label_video_file.setText(u"Video File")
         self.pushButton_fileExplorer_input.setText(u"Open...")
