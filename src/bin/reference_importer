@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+"""Reference importer executable script."""
+
+import argparse
+import sys
+from pathlib import Path
+
+import reference_importer
+
+
+def setup_parser() -> argparse.ArgumentParser:
+    """Setup the command line argument parser.
+
+    Returns:
+        Argument parser.
+    """
+    parser = argparse.ArgumentParser(
+        description="Reference importer executable script.",
+    )
+    parser.add_argument("video_file", help="Path to the video file to import.")
+    parser.add_argument("--start", help="Video start time in milliseconds.")
+    parser.add_argument("--end", help="Video start time in milliseconds.")
+    parser.add_argument(
+        "--frame-rate",
+        type=int,
+        default=24,
+        help="Frame rate of the output image sequence.",
+    )
+    parser.add_argument("--output-dir", help="Path to the output directory.")
+    parser.add_argument("--output-file-name", default="image", help="Output file name.")
+    parser.add_argument("--padding", default="%03d", help="Output file name padding.")
+    parser.add_argument(
+        "--output_extension",
+        default="jpg",
+        help="Output file extension.",
+    )
+    parser.add_argument("--gui", action="store_true", help="Run the GUI.")
+    return parser
+
+
+def main() -> None:
+    """Main function."""
+    parser = setup_parser()
+    args = parser.parse_args()
+
+    if args.gui:
+        sys.exit(reference_importer.run_gui())
+
+    video = reference_importer.Video(args.video_file)
+
+    if args.start:
+        video_start = reference_importer.Timecode.from_string(
+            args.start,
+            video.metadata.frame_rate,
+        )
+    else:
+        video_start = reference_importer.Timecode.from_milliseconds(
+            0,
+            video.metadata.frame_rate,
+        )
+
+    if args.end:
+        video_end = reference_importer.Timecode.from_string(
+            args.video_end,
+            video.metadata.frame_rate,
+        )
+    else:
+        video_end = video.metadata.duration
+
+    # Create reference based o the arguments.
+    options = reference_importer.ProcessorOptions(
+        video_start=video_start,
+        video_end=video_end,
+        padding=args.padding,
+        frame_rate=args.frame_rate,
+        output_dir=Path(args.output_dir),
+        output_file_name=args.output_file_name,
+        output_extension=args.output_extension,
+    )
+
+    # Passing Dcc as None and create_image_plane as False.
+    reference_importer.create_image_sequence(video, options, None, False)
+
+
+if __name__ == "__main__":
+    main()

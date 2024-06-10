@@ -1,16 +1,39 @@
+"""Tests for the video_processor module."""
+
+from pathlib import Path
+
 import pytest
-from core import VideoProcessor
+from reference_importer import ProcessorOptions, Timecode, VideoError
 
 
-def test_get_duration():
-    """TODO: create extremely small and portable video file for testing"""
-    # Check if the function returns the expected duration
-    processor = VideoProcessor()
-    assert processor.get_duration("path/to/video.mp4") == "00:01:30.250"
+def test_processor_options_no_arguments() -> None:
+    """Test ProcessorOptions class intialization without needed parameters."""
+    with pytest.raises(TypeError):
+        ProcessorOptions()  # pyright: ignore[reportCallIssue]
 
 
-def test_get_duration_invalid_path():
-    # Check if the function raises an Error for an invalid file path
-    with pytest.raises(Exception):
-        processor = VideoProcessor()
-        processor.get_duration("invalid/path/to/video.mp4")
+def test_processor_options() -> None:
+    """Test ProcessorOptions class with valid parameters."""
+    ProcessorOptions(
+        video_start=Timecode.from_milliseconds(0.0, 24),
+        video_end=Timecode.from_milliseconds(1000.0, 24),
+        padding="%03d",
+        frame_rate=24,
+        output_dir=Path("test_dir"),
+        output_file_name="test_file_name",
+        output_extension=".jpg",
+    )
+
+
+def test_processor_options_mismatched_timecode_frame_rate() -> None:
+    """Test ProcessorOptions class with mismatched start and end timecome frame rate."""
+    with pytest.raises(VideoError):
+        ProcessorOptions(
+            video_start=Timecode.from_milliseconds(0.0, 24),
+            video_end=Timecode.from_milliseconds(1000.0, 30),
+            padding="%03d",
+            frame_rate=24,
+            output_dir=Path("test_dir"),
+            output_file_name="test_file_name",
+            output_extension=".jpg",
+        )
